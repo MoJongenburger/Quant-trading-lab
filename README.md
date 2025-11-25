@@ -1,10 +1,11 @@
 # Quant Trading Lab
 
-A personal quant research lab containing mathematical finance models, trading strategies, and reproducible experiments in Python.
+A personal quant research lab containing mathematical finance models,
+trading strategies, and reproducible experiments in Python.
 
 The goal of this repository is to **bridge the gap between theory and practice**:
 
-- Implement well-known models from quantitative finance (Heston, Black–Scholes, etc.)
+- Implement well-known models from quantitative finance (Heston, Black–Scholes, SABR, etc.)
 - Turn them into systematic trading or hedging strategies
 - Apply them to both **simulated** and **real** market data
 - Keep the code clean and modular, in a style a quant researcher / developer would recognize
@@ -15,12 +16,12 @@ The goal of this repository is to **bridge the gap between theory and practice**
 
 ### 1. Heston stochastic volatility model
 
-Implemented under `src/quant_trading_lab/models/heston/`:
+Implemented under `src/quant_trading_lab/models/heston/`.
 
 **Model**
 
 - Stochastic variance (CIR-type) with mean reversion and leverage effect
-- Negative correlation between price and variance (leverage effect)
+- Negative correlation between price and variance (leverage effect / skew)
 
 **Pricing**
 
@@ -31,7 +32,7 @@ Implemented under `src/quant_trading_lab/models/heston/`:
 
 - Mispricing metric  
 
-  `m = (C_Heston - C_BS) / C_BS`
+  $$ m = \frac{C_{\text{Heston}} - C_{\text{BS}}}{C_{\text{BS}}} $$
 - Simple buy / sell / flat rule based on a relative mispricing threshold
 - PnL simulation along simulated Heston paths
 
@@ -42,7 +43,7 @@ The Heston module is documented in detail in
 
 ### 2. Black–Scholes model
 
-Implemented under `src/quant_trading_lab/models/black_scholes/`:
+Implemented under `src/quant_trading_lab/models/black_scholes/`.
 
 **Pricing**
 
@@ -57,9 +58,9 @@ Implemented under `src/quant_trading_lab/models/black_scholes/`:
 
 **Strategy / Hedging**
 
-- Discrete-time **delta-hedging** engine for a European call:
+- Discrete-time **delta-hedging engine** for a European call:
   - Short 1 call at $t=0$ at its Black–Scholes price
-  - Hedge with the underlying using Black–Scholes delta
+  - Hedge with the underlying using the Black–Scholes delta
   - Track the replicating portfolio value vs theoretical option price
   - Analyse the resulting **hedging error**
 
@@ -68,7 +69,35 @@ The Black–Scholes module is documented in
 
 ---
 
-## Real-data notebooks
+### 3. SABR stochastic volatility smile model
+
+Implemented under `src/quant_trading_lab/models/sabr/`.
+
+**Model**
+
+- Lognormal SABR dynamics for the forward $F_t$ and volatility $\alpha_t$:
+  - $dF_t = \alpha_t F_t^\beta dW_t^{(1)}$
+  - $d\alpha_t = \nu \alpha_t dW_t^{(2)}$
+  - $dW_t^{(1)} dW_t^{(2)} = \rho dt$
+- Parameters $(\alpha, \beta, \rho, \nu)$ shape the overall level, skew and smile curvature
+
+**Implied volatility**
+
+- Hagan lognormal SABR implied volatility approximation
+- Works for single strikes or full **smiles** across strikes
+
+**Calibration**
+
+- Simple least-squares calibration via grid search:
+  - Fixes $\beta$ and fits $(\alpha, \rho, \nu)$ to a given smile
+  - Suitable for synthetic experiments and pedagogy (no SciPy required)
+
+The SABR module is documented in  
+`src/quant_trading_lab/models/sabr/README.md`.
+
+---
+
+## Real-data and synthetic notebooks
 
 In `notebooks/` you can find research-style notebooks that connect:
 
@@ -76,30 +105,32 @@ In `notebooks/` you can find research-style notebooks that connect:
 
 Current notebooks:
 
-- **`heston_model_demo.ipynb`**
-  - Simulates and plots Heston price and variance paths
-  - Shows how stochastic variance evolves over time
-  - Explores the distribution of terminal prices under Heston vs a simple lognormal assumption
+- **`heston_model_demo.ipynb`**  
+  Simulates and plots Heston price and variance paths, shows how stochastic variance evolves
+  over time, and compares terminal price distributions under Heston vs a simple lognormal model.
 
-- **`black_scholes_delta_hedge.ipynb`**
-  - Downloads real equity data (e.g. AAPL, PLTR) with `yfinance`
-  - Estimates a constant volatility from historical returns
-  - Sets up a 1-year at-the-money European call
-  - Shorts 1 call and **delta-hedges** it using Black–Scholes delta
-  - Plots:
-    - Underlying price
-    - Theoretical Black–Scholes option price
-    - Replicating portfolio value
-    - Hedging error over time
+- **`black_scholes_delta_hedge.ipynb`**  
+  Downloads real equity data (e.g. `AAPL`, `PLTR`) via `yfinance`, estimates a constant volatility
+  from historical returns, sets up a 1-year at-the-money call, and runs a discrete-time
+  Black–Scholes delta-hedging strategy.  
+  At the bottom you can use:
 
-At the bottom of the Black–Scholes notebook you can reuse a simple pattern:
-
-```python
-results = run_bs_delta_hedge_for_ticker("AAPL", period="1y")
-plot_bs_hedging_results(results)
+  ```python
+  results = run_bs_delta_hedge_for_ticker("AAPL", period="1y")
+  plot_bs_hedging_results(results)
 ````
 
-and just change `"AAPL"` to another ticker (e.g. `"PLTR"`).
+and simply change `"AAPL"` to another ticker.
+
+* **`sabr_smile_trading_demo.ipynb`**
+  Synthetic SABR smile construction, noisy “market” vols, SABR calibration, a simple
+  mispricing-based options strategy, and PnL distribution plots.
+
+* **`sabr_surface_3d.ipynb`**
+  3D SABR implied volatility surface visualisation and 2D smiles for multiple maturities, with
+  optional noise to mimic real-world quoted implied vol surfaces.
+
+See `notebooks/README.md` for more detail.
 
 ---
 
@@ -136,38 +167,43 @@ Each model will live in its own subdirectory with:
 
 ## Repository structure
 
-High-level layout:
+High-level layout (simplified):
 
 ```text
 quant-trading-lab/
-├─ README.md                 # this file
+├─ README.md
 ├─ LICENSE
 ├─ src/
 │  └─ quant_trading_lab/
 │     ├─ __init__.py
 │     └─ models/
 │        ├─ heston/
-│        │  ├─ README.md     # Heston documentation (math + design)
-│        │  ├─ params.py     # model & option parameter dataclasses
-│        │  ├─ simulation.py # Heston path simulation (full-truncation Euler)
-│        │  ├─ pricing.py    # Heston MC pricer + Black–Scholes benchmark
-│        │  └─ strategy.py   # mispricing signal + PnL backtest
-│        └─ black_scholes/
-│           ├─ README.md     # Black–Scholes documentation (assumptions + formulas)
+│        │  ├─ README.md
+│        │  ├─ params.py
+│        │  ├─ simulation.py
+│        │  ├─ pricing.py
+│        │  └─ strategy.py
+│        ├─ black_scholes/
+│        │  ├─ README.md
+│        │  ├─ __init__.py
+│        │  ├─ pricing.py
+│        │  ├─ greeks.py
+│        │  └─ strategy.py
+│        └─ sabr/
+│           ├─ README.md
 │           ├─ __init__.py
-│           ├─ pricing.py    # Closed-form BS pricing + implied vol
-│           ├─ greeks.py     # Delta, gamma, vega, theta, rho
-│           └─ strategy.py   # Delta-hedging engine and demo
-├─ examples/
-│  └─ heston_demo.py         # End-to-end demo on synthetic Heston paths
+│           ├─ sabr.py
+│           └─ calibration.py
 ├─ notebooks/
-│  ├─ README.md              # Overview of available notebooks
+│  ├─ README.md
 │  ├─ heston_model_demo.ipynb
-│  └─ black_scholes_delta_hedge.ipynb
+│  ├─ black_scholes_delta_hedge.ipynb
+│  ├─ sabr_smile_trading_demo.ipynb
+│  └─ sabr_surface_3d.ipynb
 └─ tests/
-   ├─ test_heston_pricing.py           # Basic tests for Heston pricing
-   ├─ test_black_scholes_pricing.py    # Tests for BS prices & implied vols
-   └─ test_black_scholes_greeks.py     # Tests for BS Greeks properties
+   ├─ README.md
+   ├─ test_heston_pricing.py
+   ├─ test_black_scholes_pricing.py
+   ├─ test_black_scholes_greeks.py
+   └─ test_sabr_model.py
 ```
-
-You can extend this structure as the lab grows (e.g. more models, more tests, additional notebooks), but this README now matches what you actually have in place.
