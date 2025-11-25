@@ -1,61 +1,94 @@
 # Quant Trading Lab
 
-A personal **quant research lab** containing mathematical finance models, trading strategies, and reproducible experiments in Python.
+A personal quant research lab containing mathematical finance models, trading strategies, and reproducible experiments in Python.
 
-The goal of this repository is to bridge the gap between **theory and practice**:
+The goal of this repository is to **bridge the gap between theory and practice**:
 
-- Implement well-known models from **quantitative finance** (Heston, Black–Scholes, etc.)
-- Turn them into **systematic trading strategies**
-- Write **clean, well-documented code** that a quant researcher or developer would recognize
+- Implement well-known models from quantitative finance (Heston, Black–Scholes, etc.)
+- Turn them into systematic trading strategies
+- Apply them to both **simulated** and **real market data**
+- Keep the code clean and modular, in a style a quant researcher / developer would recognize
 
 ---
 
-## Contents
+## Current components
 
-Current and planned components:
+### Heston stochastic volatility model
 
--  **Heston Stochastic Volatility Model**
-  - Option pricing via Monte Carlo under Heston dynamics
-  - Comparison to Black–Scholes pricing
-  - Simple mispricing-based trading strategy and PnL simulation
+Implemented under `src/quant_trading_lab/models/heston/`:
 
--  **Planned modules**
-  - Black–Scholes implied volatility surface & Greeks
-  - Mean-reversion / pairs trading strategies
-  - Basic portfolio and risk models (e.g. Markowitz, CAPM-inspired overlays)
-  - Volatility trading ideas (variance swaps, gamma scalping – simplified)
+- **Model**
+  - Stochastic variance (CIR-type) with mean reversion and leverage effect
+- **Pricing**
+  - Monte Carlo pricing of European calls under Heston dynamics
+  - Black–Scholes pricing as a benchmark using a constant “market” volatility
+- **Trading**
+  - Mispricing metric
+    - $$ m = \frac{C^{\text{Heston}} - C^{\text{BS}}}{C^{\text{BS}}} $$
+  - Simple buy / sell / flat rule based on a relative mispricing threshold
+  - PnL simulation along simulated Heston paths
+
+### Real-data notebooks
+
+In `notebooks/` you can find research-style notebooks that:
+
+- Download **real equity data** (e.g. AAPL, PLTR) with `yfinance`
+- Estimate historical volatility from daily returns
+- Use the Heston model to price short-dated at-the-money options
+- Compare Heston prices to Black–Scholes prices using historical vol as “market vol”
+- Run and visualise a mispricing-based options strategy and its PnL
+
+These notebooks are intended to show a full pipeline:
+
+> data → model → pricing → signal → backtest → plots
+
+---
+
+## Planned modules
+
+Planned additions to this lab include:
+
+- **Black–Scholes utilities**
+  - Implied volatility and Greeks
+  - Simple volatility surface exploration
+- **Mean-reversion / pairs trading**
+  - OU-type processes and statistical arbitrage toy examples
+- **Portfolio & risk models**
+  - Markowitz mean–variance optimisation
+  - CAPM-style factor overlays and simple risk attribution
+- **Volatility trading ideas (simplified)**
+  - Variance-swap approximations
+  - Gamma / vega-driven strategies in a toy setting
 
 Each model will live in its own subdirectory with:
 
-- A **model-specific README** (math + intuition)
-- **Python implementation** (simulation, pricing, strategy)
-- Optionally a **notebook** or example script
+- A model-specific `README.md` (math + intuition)
+- Python implementation (simulation / pricing / strategy logic)
+- Optionally a notebook and/or example script
 
 ---
 
 ## Repository structure
 
-The lab is organized to look like a small research/codebase rather than a single script:
+High-level layout:
 
 ```text
 quant-trading-lab/
-├─ README.md
-├─ requirements.txt           # or pyproject.toml if using poetry
+├─ README.md                 # this file
+├─ LICENSE
 ├─ src/
 │  └─ quant_trading_lab/
 │     ├─ __init__.py
-│     ├─ common/              # shared utilities (rng, plotting, helpers)
 │     └─ models/
 │        └─ heston/
-│           ├─ README.md      # detailed Heston explanation
-│           ├─ params.py      # model & option parameter classes
-│           ├─ simulation.py  # Heston path simulation
-│           ├─ pricing.py     # Heston MC pricing + Black–Scholes pricing
-│           ├─ strategy.py    # trading rules & PnL simulation
-│           └─ plotting.py    # optional: visualization helpers
+│           ├─ README.md     # Heston documentation (math + design)
+│           ├─ params.py     # model & option parameter dataclasses
+│           ├─ simulation.py # Heston path simulation (full-truncation Euler)
+│           ├─ pricing.py    # Heston MC pricer + Black–Scholes benchmark
+│           └─ strategy.py   # mispricing signal + PnL backtest
 ├─ examples/
-│  └─ heston_demo.py          # end-to-end demo: pricing + trading signal + PnL
+│  └─ heston_demo.py         # end-to-end demo on synthetic Heston paths
+├─ notebooks/
+│  └─ heston_...ipynb        # real-data experiments (e.g. AAPL / PLTR mispricing)
 └─ tests/
-   ├─ test_heston_pricing.py
-   └─ test_heston_strategy.py
-
+   └─ test_heston_pricing.py # basic unit tests for Heston pricing
