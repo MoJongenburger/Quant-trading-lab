@@ -45,9 +45,7 @@ For a European call or put, we:
 
 1. **Build the stock price tree** at maturity $T$:
 
-   $$
-   S_{N,j} = S_0 u^j d^{N-j}, \quad j = 0, 1, \dots, N
-   $$
+   $S_{N,j} = S_0 u^j d^{N-j}, \quad j = 0, 1, \dots, N$
 
 2. Compute terminal **payoffs**:
 
@@ -56,9 +54,7 @@ For a European call or put, we:
 
 3. Perform **backward induction** under the risk-neutral measure:
 
-   $$
-   V_{n,j} = e^{-r \Delta t} \Big( p V_{n+1,j+1} + (1-p) V_{n+1,j} \Big),
-   $$
+   $V_{n,j} = e^{-r \Delta t} \Big( p V_{n+1,j+1} + (1-p) V_{n+1,j} \Big)$
 
    until we reach $V_{0,0}$, the time–0 price.
 
