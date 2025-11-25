@@ -255,18 +255,3 @@ Notebooks in the root `notebooks/` folder will demonstrate:
 * Hagan, P. and Woodward, D. (1999),
   *“Equivalent Black Volatilities”*.
 
-````
-
----
-
-Next step (when you’re ready): we’ll add
-
-- `__init__.py`
-- `sabr.py` with the Hagan implied vol function
-- `calibration.py` with a least-squares calibrator
-
-so you can later plug in option data (either synthetic or from `yfinance`) and say:
-
-```python
-params = calibrate_sabr(F0, T, strikes, market_vols, beta=0.5)
-````
