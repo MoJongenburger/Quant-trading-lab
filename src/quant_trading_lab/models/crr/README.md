@@ -76,7 +76,7 @@ $$
 V_{n,j} = \max\Big(
     e^{-r \Delta t} (p V_{n+1,j+1} + (1-p) V_{n+1,j}),
     \text{intrinsic}(S_{n,j})
-\Big),
+\Big)
 $$
 
 where $\text{intrinsic}(S_{n,j})$ is:
