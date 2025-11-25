@@ -222,10 +222,3 @@ The **notebooks** in the root `notebooks/` folder demonstrate:
   *“A Closed-Form Solution for Options with Stochastic Volatility with Applications to Bond and Currency Options”*,
   The Review of Financial Studies, Vol. 6, No. 2.
 
-```
-
-If copying still fights you, you can also:
-
-- Select inside the code block, press `Ctrl+A` (or `Cmd+A` on Mac) to select all inside it, then `Ctrl+C` / `Cmd+C`.
-::contentReference[oaicite:0]{index=0}
-```
