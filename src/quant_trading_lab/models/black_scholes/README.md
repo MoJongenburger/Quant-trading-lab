@@ -54,31 +54,31 @@ Consider a European call and put with:
 
 Define
 
-```math
-d_1 = \frac{\ln(S_0 / K) + (r + \tfrac{1}{2} \sigma^2) T}{\sigma \sqrt{T}}, 
+
+$d_1 = \frac{\ln(S_0 / K) + (r + \tfrac{1}{2} \sigma^2) T}{\sigma \sqrt{T}}, 
 \qquad
-d_2 = d_1 - \sigma \sqrt{T}.
-```
+d_2 = d_1 - \sigma \sqrt{T}$
+
 
 Let $N(\cdot)$ be the standard normal CDF. Then:
 
 * **Call price**:
 
-  ```math
-  C_0 = S_0 N(d_1) - K e^{-rT} N(d_2).
-  ```
+  
+  $C_0 = S_0 N(d_1) - K e^{-rT} N(d_2)$
+  
 
 * **Put price**:
 
-  ```math
-  P_0 = K e^{-rT} N(-d_2) - S_0 N(-d_1).
-  ```
+ 
+  $P_0 = K e^{-rT} N(-d_2) - S_0 N(-d_1)$
+  
 
 These satisfy **put–call parity**:
 
-```math
-C_0 - P_0 = S_0 - K e^{-rT}.
-```
+
+$C_0 - P_0 = S_0 - K e^{-rT}$
+
 
 ---
 
@@ -96,23 +96,23 @@ For example, for a European call in Black–Scholes:
 
 * Delta:
 
-  ```math
-  \Delta_{\text{call}} = N(d_1).
-  ```
+  
+  $\Delta_{\text{call}} = N(d_1)$
+
 
 * Gamma (same for calls and puts):
 
-  ```math
-  \Gamma = \frac{N'(d_1)}{S_0 \sigma \sqrt{T}},
-  ```
+  
+  $\Gamma = \frac{N'(d_1)}{S_0 \sigma \sqrt{T}}$
+  
 
   where $N'(x)$ is the standard normal PDF.
 
 * Vega (same for calls and puts):
 
-  ```math
-  \nu = S_0 N'(d_1) \sqrt{T}.
-  ```
+  
+  $\nu = S_0 N'(d_1) \sqrt{T}$
+
 
 These formulas are implemented in code so they can be used for hedging simulations and risk analysis.
 
@@ -127,10 +127,10 @@ The **implied volatility** $\sigma_{\text{impl}}$ is defined as:
 
 Formally, for a call:
 
-```math
-\text{Given } C_{\text{mkt}}, \text{ find } \sigma_{\text{impl}} \text{ such that }
-C_{\text{BS}}(S_0, K, T, r, \sigma_{\text{impl}}) = C_{\text{mkt}}.
-```
+
+$\text{Given } C_{\text{mkt}}, \text{ find } \sigma_{\text{impl}} \text{ such that }
+C_{\text{BS}}(S_0, K, T, r, \sigma_{\text{impl}}) = C_{\text{mkt}}$
+
 
 In this module we provide a numerical solver (e.g. Newton or bisection) to invert the Black–Scholes formula and compute implied volatility for calls (and optionally puts).
 
