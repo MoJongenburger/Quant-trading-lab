@@ -115,12 +115,13 @@ Implemented under `src/quant_trading_lab/models/crr/`.
 - Discrete-time recombining binomial tree for the underlying price  
 - Standard CRR parameterisation from volatility:
 
-  $$
-  \Delta t = \frac{T}{N}, \quad
-  u = e^{\sigma \sqrt{\Delta t}}, \quad
-  d = \frac{1}{u}, \quad
-  p = \frac{e^{r \Delta t} - d}{u - d}
-  $$
+$$
+\Delta t = \frac{T}{N}, \quad
+u = e^{\sigma \sqrt{\Delta t}}, \quad
+d = \frac{1}{u}, \quad
+p = \frac{e^{r \Delta t} - d}{u - d}.
+$$
+
 
 - Risk-neutral probability $p$ checked to lie in $[0,1]$
 
