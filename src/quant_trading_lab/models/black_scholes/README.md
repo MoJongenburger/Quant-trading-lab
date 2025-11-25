@@ -19,7 +19,7 @@ In the classical Black–Scholes setup:
 - The underlying asset price $S_t$ follows a **geometric Brownian motion** under the risk-neutral measure:
   
   
-  $ dS_t = r S_t\, dt + \sigma S_t\, dW_t, $
+  $dS_t = r S_t\, dt + \sigma S_t\, dW_t$
 
 
 where
