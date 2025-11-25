@@ -79,11 +79,11 @@ Implemented under `src/quant_trading_lab/models/sabr/`.
 
 - Lognormal SABR dynamics for the forward $F_t$ and volatility $\alpha_t$:
 
-  $\begin{aligned}
+  $$\begin{aligned}
   dF_t &= \alpha_t F_t^\beta \, dW_t^{(1)}, \\
   d\alpha_t &= \nu \alpha_t \, dW_t^{(2)}, \\
   dW_t^{(1)} dW_t^{(2)} &= \rho \, dt,
-  \end{aligned}$
+  \end{aligned}$$
 
 - Parameters $(\alpha, \beta, \rho, \nu)$ shape the overall level, skew and smile curvature
 
