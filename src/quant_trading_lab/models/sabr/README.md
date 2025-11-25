@@ -157,8 +157,7 @@ A common approach:
 
    $\text{Error}(\alpha, \rho, \nu)
    = \sum_{i=1}^N w_i \Big(
-   \sigma_{\text{SABR}}(K_i; \alpha, \beta, \rho, \nu)
-   - \sigma_{\text{mkt}}(K_i)
+   \sigma_{\text{SABR}}(K_i; \alpha, \beta, \rho, \nu) - \sigma_{\text{mkt}}(K_i)
    \Big)^2$
 
    where $w_i$ are optional weights (e.g. volume-based or uniform).
