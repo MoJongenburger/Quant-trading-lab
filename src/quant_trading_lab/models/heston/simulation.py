@@ -6,7 +6,7 @@ We use a full-truncation Euler scheme to keep the variance non-negative.
 
 from __future__ import annotations
 
-from typing import Tuple
+from typing import Tuple, Optional
 
 import numpy as np
 
@@ -19,7 +19,8 @@ def simulate_heston_paths(
     T: float,
     n_steps: int,
     n_paths: int,
-    seed: int | None = None,
+    seed: Optional[int] = None,
+    rng: Optional[np.random.Generator] = None,
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     """
     Simulate joint paths of (S_t, v_t) under the Heston model using a
@@ -38,7 +39,10 @@ def simulate_heston_paths(
     n_paths : int
         Number of Monte Carlo paths to simulate.
     seed : int, optional
-        Random seed for reproducibility.
+        Random seed for reproducibility (ignored if rng is provided).
+    rng : np.random.Generator, optional
+        NumPy random number generator. If None, a new Generator is created
+        from the given seed.
 
     Returns
     -------
@@ -49,8 +53,8 @@ def simulate_heston_paths(
     v_paths : ndarray, shape (n_paths, n_steps + 1)
         Simulated variance paths.
     """
-    if seed is not None:
-        np.random.seed(seed)
+    if rng is None:
+        rng = np.random.default_rng(seed)
 
     dt = T / n_steps
     sqrt_dt = np.sqrt(dt)
@@ -62,29 +66,25 @@ def simulate_heston_paths(
     v0 = params.v0
     r = params.r
 
-    # Time grid
     times = np.linspace(0.0, T, n_steps + 1)
 
-    # Allocate arrays: rows = paths, cols = time steps
     S_paths = np.empty((n_paths, n_steps + 1), dtype=float)
     v_paths = np.empty((n_paths, n_steps + 1), dtype=float)
 
-    # Initial conditions
     S_paths[:, 0] = S0
     v_paths[:, 0] = v0
 
     for t in range(n_steps):
         # Draw independent standard normals
-        Z1 = np.random.normal(size=n_paths)
-        Z_perp = np.random.normal(size=n_paths)
+        Z1 = rng.standard_normal(size=n_paths)
+        Z_perp = rng.standard_normal(size=n_paths)
 
-        # Correlated shock for the variance Brownian motion
+        # Correlated shocks
         Z2 = rho * Z1 + np.sqrt(1.0 - rho**2) * Z_perp
 
         v_prev = v_paths[:, t]
         S_prev = S_paths[:, t]
 
-        # Truncate variance at zero to avoid negative values
         v_pos = np.maximum(v_prev, 0.0)
 
         # Variance update (full truncation Euler)
@@ -95,8 +95,7 @@ def simulate_heston_paths(
         )
         v_next = np.maximum(v_next, 0.0)
 
-        # Price update under risk-neutral dynamics
-        # dS_t / S_t = r dt + sqrt(v_t) dW_1(t)
+        # Price update
         S_next = S_prev * np.exp(
             (r - 0.5 * v_pos) * dt + np.sqrt(v_pos) * sqrt_dt * Z1
         )
