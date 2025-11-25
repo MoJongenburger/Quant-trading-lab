@@ -16,9 +16,9 @@ using real or simulated data.
 
 A demonstration of the Heston stochastic volatility model:
 
-- Simulates and plots Heston price and variance paths
-- Shows how stochastic variance evolves over time (mean reversion, volatility-of-volatility, leverage effect)
-- Illustrates the distribution of terminal prices under Heston vs a simple lognormal assumption
+- Simulates and plots Heston price and variance paths  
+- Shows how stochastic variance evolves over time (mean reversion, volatility-of-volatility, leverage effect)  
+- Illustrates the distribution of terminal prices under Heston vs a simple lognormal assumption  
 
 This notebook focuses on **model intuition and dynamics**, not trading.
 
@@ -28,14 +28,14 @@ This notebook focuses on **model intuition and dynamics**, not trading.
 
 A real-data delta-hedging experiment under the Black–Scholes model:
 
-- Downloads daily close prices for a chosen equity (e.g. `AAPL`, `PLTR`) via `yfinance`
-- Estimates a constant volatility from historical returns
-- Sets up a 1-year at-the-money European call
-- Shorts 1 call and delta-hedges it using the Black–Scholes delta
+- Downloads daily close prices for a chosen equity (e.g. `AAPL`, `PLTR`) via `yfinance`  
+- Estimates a constant volatility from historical returns  
+- Sets up a 1-year at-the-money European call  
+- Shorts 1 call and delta-hedges it using the Black–Scholes delta  
 - Tracks and plots:
-  - The theoretical Black–Scholes option price
-  - The value of the replicating (hedged) portfolio
-  - The hedging error over time
+  - The theoretical Black–Scholes option price  
+  - The value of the replicating (hedged) portfolio  
+  - The hedging error over time  
 
 At the bottom of the notebook, you can reuse:
 
@@ -74,14 +74,35 @@ A visual exploration of the SABR implied volatility **surface**:
 
 * Uses the Hagan lognormal SABR approximation to compute σ(K, T)
 * Plots a 3D SABR implied volatility surface over **strike–maturity** space
-* Plots 2D **smiles** (vol vs strike) for several maturities
-* Optionally adds **noise** to the vols to mimic real market data and overlays:
+* Plots 2D smiles (vol vs strike) for several maturities
+* Optionally adds noise to the vols to mimic real market data and overlays:
 
   * a smooth SABR model (wireframe),
-  * a noisy “market” surface / scattered points.
+  * a noisy “market” surface / scattered points
 
-This notebook is focused on **intuition and visualisation** of how the SABR parameters
-(α, β, ρ, ν) shape skew, smile curvature and term structure.
+This notebook is focused on **intuition and visualisation** of how the SABR parameters (α, β, ρ, ν) shape skew, smile curvature and term structure.
+
+---
+
+### `crr_model_trading_demo.ipynb`
+
+A pricing and trading demo for the **Cox–Ross–Rubinstein (CRR) binomial model**:
+
+* Implements European and American option pricing on a recombining CRR tree
+* Shows **convergence** of CRR European call prices to the Black–Scholes price as the number of steps `N` increases
+* Compares **American vs European** prices:
+
+  * American call vs European call on a non-dividend-paying stock
+  * American put vs European put (highlighting early-exercise value)
+* Builds a toy **mispricing strategy**:
+
+  * “Market” uses a coarse, low-step CRR tree to price calls
+  * The “model” uses a fine, high-step CRR tree as fair value
+  * Trades long/short calls across strikes based on relative mispricing
+* Simulates terminal prices under the high-step CRR model and plots the **PnL distribution** of the strategy
+
+This notebook illustrates how a simple discrete-time model can be used for both
+**theoretical insight** (CRR → Black–Scholes) and **toy trading ideas**.
 
 ---
 
@@ -94,4 +115,3 @@ Planned additions include, for example:
 * Portfolio / risk demos (Markowitz, CAPM-style analysis)
 
 As the repository grows, new notebooks will be added here and linked in this README.
-
