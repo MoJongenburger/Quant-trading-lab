@@ -31,9 +31,9 @@ Implemented under `src/quant_trading_lab/models/heston/`.
 
 - Mispricing metric  
 
-  \[
+  $$
   m = \frac{C_{\text{Heston}} - C_{\text{BS}}}{C_{\text{BS}}}
-  \]
+  $$
 
 - Simple buy / sell / flat rule based on a relative mispricing threshold  
 - PnL simulation along simulated Heston paths  
@@ -55,13 +55,13 @@ Implemented under `src/quant_trading_lab/models/black_scholes/`.
 
 **Greeks**
 
-- Delta, gamma, vega, theta, rho  
+- $\Delta$ (delta), $\Gamma$ (gamma), vega, $\Theta$ (theta), $\rho$  
 - Designed for use in hedging simulations and risk analysis  
 
 **Strategy / Hedging**
 
 - Discrete-time delta-hedging engine for a European call:
-  - Short 1 call at \( t = 0 \) at its Black–Scholes price  
+  - Short 1 call at $t = 0$ at its Black–Scholes price  
   - Hedge with the underlying using the Black–Scholes delta  
   - Track the replicating portfolio value vs theoretical option price  
   - Analyse the resulting hedging error  
@@ -77,17 +77,17 @@ Implemented under `src/quant_trading_lab/models/sabr/`.
 
 **Model**
 
-- Lognormal SABR dynamics for the forward \( F_t \) and volatility \( \alpha_t \):
+- Lognormal SABR dynamics for the forward $F_t$ and volatility $\alpha_t$:
 
-  \[
+  $$
   \begin{aligned}
   dF_t &= \alpha_t F_t^\beta \, dW_t^{(1)}, \\
   d\alpha_t &= \nu \alpha_t \, dW_t^{(2)}, \\
   dW_t^{(1)} dW_t^{(2)} &= \rho \, dt,
   \end{aligned}
-  \]
+  $$
 
-- Parameters \((\alpha, \beta, \rho, \nu)\) shape the overall level, skew and smile curvature
+- Parameters $(\alpha, \beta, \rho, \nu)$ shape the overall level, skew and smile curvature
 
 **Implied volatility**
 
@@ -97,7 +97,7 @@ Implemented under `src/quant_trading_lab/models/sabr/`.
 **Calibration**
 
 - Simple least-squares calibration via grid search:
-  - Fixes \(\beta\) and fits \((\alpha, \rho, \nu)\) to a given smile  
+  - Fixes $\beta$ and fits $(\alpha, \rho, \nu)$ to a given smile  
   - Suitable for synthetic experiments and pedagogy (no SciPy required)
 
 The SABR module is documented in  
@@ -114,14 +114,14 @@ Implemented under `src/quant_trading_lab/models/crr/`.
 - Discrete-time recombining binomial tree for the underlying price  
 - Standard CRR parameterisation from volatility:
 
-  \[
+  $$
   \Delta t = \frac{T}{N}, \quad
   u = e^{\sigma \sqrt{\Delta t}}, \quad
   d = \frac{1}{u}, \quad
   p = \frac{e^{r \Delta t} - d}{u - d}
-  \]
+  $$
 
-- Risk-neutral probability \(p\) checked to lie in \([0,1]\)
+- Risk-neutral probability $p$ checked to lie in $[0,1]$
 
 **Pricing**
 
@@ -130,8 +130,8 @@ Implemented under `src/quant_trading_lab/models/crr/`.
 
 **Theoretical link**
 
-- European CRR prices converge to Black–Scholes prices as \(N \to \infty\)  
-- American call on a non-dividend-paying stock ≈ European call (no early exercise premium)  
+- European CRR prices converge to Black–Scholes prices as $N \to \infty$  
+- American call on a non-dividend-paying stock $\approx$ European call (no early exercise premium)  
 - American put is never worth less than the European put
 
 The CRR module is documented in  
@@ -261,3 +261,5 @@ quant-trading-lab/
    ├─ test_sabr_model.py
    └─ test_crr_pricing.py
 ```
+
+
