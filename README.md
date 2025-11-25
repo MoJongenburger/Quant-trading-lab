@@ -24,6 +24,7 @@ Implemented under `src/quant_trading_lab/models/heston/`:
   - Black–Scholes pricing as a benchmark using a constant “market” volatility
 - **Trading**
   - Mispricing metric
+    '''math
     - $ m = \frac{C^{\text{Heston}} - C^{\text{BS}}}{C^{\text{BS}}} $
   - Simple buy / sell / flat rule based on a relative mispricing threshold
   - PnL simulation along simulated Heston paths
