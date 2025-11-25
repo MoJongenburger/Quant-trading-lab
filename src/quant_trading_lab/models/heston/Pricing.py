@@ -8,15 +8,17 @@ Includes:
 
 from __future__ import annotations
 
-from typing import Optional
+from typing import Optional, Union
 
 import numpy as np
 
 from .params import HestonParams, OptionParams
 from .simulation import simulate_heston_paths
 
+ArrayLike = Union[np.ndarray, float]
 
-def _norm_cdf(x: np.ndarray | float) -> np.ndarray | float:
+
+def _norm_cdf(x: ArrayLike) -> ArrayLike:
     """
     Standard normal cumulative distribution function using erf.
 
@@ -27,7 +29,6 @@ def _norm_cdf(x: np.ndarray | float) -> np.ndarray | float:
     if isinstance(x, float):
         return 0.5 * (1.0 + erf(x / sqrt(2.0)))
     else:
-        # vectorized
         return 0.5 * (1.0 + np.erf(x / np.sqrt(2.0)))
 
 
@@ -81,6 +82,7 @@ def price_european_call_heston_mc(
     n_steps: int = 200,
     n_paths: int = 50_000,
     seed: Optional[int] = None,
+    rng: Optional[np.random.Generator] = None,
 ) -> float:
     """
     Monte Carlo price of a European call option under the Heston model.
@@ -98,7 +100,9 @@ def price_european_call_heston_mc(
     n_paths : int, optional
         Number of Monte Carlo paths.
     seed : int, optional
-        Random seed for reproducibility.
+        Random seed (ignored if rng is provided).
+    rng : np.random.Generator, optional
+        NumPy random number generator.
 
     Returns
     -------
@@ -112,6 +116,7 @@ def price_european_call_heston_mc(
         n_steps=n_steps,
         n_paths=n_paths,
         seed=seed,
+        rng=rng,
     )
 
     ST = S_paths[:, -1]
