@@ -155,13 +155,11 @@ A common approach:
 1. **Fix $\beta$** based on convention or prior (e.g. $\beta = 0.5$ or $0.7$).
 2. Minimise a least-squares error over $(\alpha, \rho, \nu)$:
 
-   $$
-   \text{Error}(\alpha, \rho, \nu)
+   $\text{Error}(\alpha, \rho, \nu)
    = \sum_{i=1}^N w_i \Big(
    \sigma_{\text{SABR}}(K_i; \alpha, \beta, \rho, \nu)
    - \sigma_{\text{mkt}}(K_i)
-   \Big)^2,
-   $$
+   \Big)^2$
 
    where $w_i$ are optional weights (e.g. volume-based or uniform).
 
