@@ -145,9 +145,7 @@ This links the SABR parameters to a full **Black–Scholes implied vol smile**, 
 
 For a given maturity $T$ we observe a set of implied volatilities:
 
-$$
-\{(K_i, \sigma_{\text{mkt}}(K_i))\}_{i=1}^N.
-$$
+$\{(K_i, \sigma_{\text{mkt}}(K_i))\}_{i=1}^N$
 
 We want to find SABR parameters $(\alpha, \beta, \rho, \nu)$ such that
 the SABR implied vols $\sigma_{\text{SABR}}(K_i)$ fit the market smile.
