@@ -155,7 +155,7 @@ In `notebooks/` you can find research-style notebooks that connect:
   ```python
   results = run_bs_delta_hedge_for_ticker("AAPL", period="1y")
   plot_bs_hedging_results(results)
-````
+  ```
 
 and simply change `"AAPL"` to another ticker.
 
