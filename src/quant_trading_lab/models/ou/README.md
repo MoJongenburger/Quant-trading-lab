@@ -125,7 +125,7 @@ $$
 **Conditional variance**
 
 $$
-\operatorname{Var}[X_{t+\Delta t} \mid X_t]
+\mathrm{Var}[X_{t+\Delta t} \mid X_t]
 = \frac{\sigma^2}{2\kappa}\left(1 - e^{-2\kappa \Delta t}\right).
 $$
 
@@ -156,7 +156,7 @@ where:
 - $a = \theta(1 - b)$,
 - $\varepsilon_t$ is Gaussian noise with variance
   $$
-  \operatorname{Var}(\varepsilon_t)
+  \mathrm{Var}(\varepsilon_t)
   = \sigma^2 \cdot \frac{1 - e^{-2\kappa \Delta t}}{2\kappa}.
   $$
 
@@ -184,21 +184,27 @@ This is just an **AR(1) model** in discrete time. We can:
 3. **Estimate $\sigma$ from the residual variance:**
 
    Let
+
    $$
    \hat{\varepsilon}_t = X_{t+1} - (a + b X_t),
    $$
+
    and define
+
    $$
    \hat{\sigma}_\varepsilon^2
-   \approx \frac{1}{n-2} \sum_{t} \hat{\varepsilon}_t^2.
+   \approx \frac{1}{n-2} \sum_t \hat{\varepsilon}_t^2.
    $$
 
    Use the relationship
+
    $$
    \hat{\sigma}_\varepsilon^2
    = \sigma^2 \cdot \frac{1 - e^{-2\kappa \Delta t}}{2\kappa}
    $$
+
    to solve for $\sigma$:
+
    $$
    \sigma
    = \sqrt{
