@@ -154,57 +154,52 @@ where:
 - $b = e^{-\kappa \Delta t}$,
 - $a = \theta(1 - b)$,
 - $\varepsilon_t$ is Gaussian noise with variance
-  $
-  \mathrm{Var}(\varepsilon_t) = \sigma^2 \cdot \frac{1 - e^{-2\kappa \Delta t}}{2\kappa}.
-  $
+  $$
+  Var(\varepsilon_t) = \sigma^2 \cdot \frac{1 - e^{-2\kappa \Delta t}}{2\kappa}.
+  $$
 
 This is just an **AR(1) model** in discrete time. We can:
 
 1. **Run a simple OLS regression:**
 
-   $$ X_{t+1} = a + b X_t + \varepsilon_t $$
+$$
+X_{t+1} = a + b X_t + \varepsilon_t
+$$
+
 
    to estimate $a$ and $b$.
 
 2. **Recover continuous-time parameters:**
 
    - Mean-reversion speed:
-     $$ \kappa = -\frac{1}{\Delta t}\ln b, $$
+$$\kappa = -\frac{1}{\Delta t}\ln b$$
    - Long-run mean:
-     $$ \theta = \frac{a}{1 - b}. $$
+$$\theta = \frac{a}{1 - b}$$
 
 3. **Estimate $\sigma$ from the residual variance:**
 
    Let
-
-   $$
-   \hat{\varepsilon}_t = X_{t+1} - (a + b X_t),
-   $$
+$$
+\hat{\varepsilon}_t = X_{t+1} - (a + b X_t),
+$$
 
    and define
 
-   $$
-   \hat{\sigma}_\varepsilon^2
-   \approx \frac{1}{n-2} \sum_t \hat{\varepsilon}_t^2.
-   $$
+$$
+\hat{\sigma}_\varepsilon^2\approx \frac{1}{n-2} \sum_t \hat{\varepsilon}_t^2.
+$$
 
    Use the relationship
 
-   $$
-   \hat{\sigma}_\varepsilon^2
-   = \sigma^2 \cdot \frac{1 - e^{-2\kappa \Delta t}}{2\kappa}
-   $$
+$$
+\hat{\sigma}_\varepsilon^2 = \sigma^2 \cdot \frac{1 - e^{-2\kappa \Delta t}}{2\kappa}
+$$
 
    to solve for $\sigma$:
 
-   $$
-   \sigma
-   = \sqrt{
-       \hat{\sigma}_\varepsilon^2
-       \cdot
-       \frac{2\kappa}{1 - e^{-2\kappa \Delta t}}
-     }.
-   $$
+$$
+\sigma = \sqrt{ \hat{\sigma}_\varepsilon^2 \cdot \frac{2\kappa}{1 - e^{-2\kappa \Delta t}} }
+$$
 
 In this module, `estimate_ou_from_series` wraps exactly this logic:
 
