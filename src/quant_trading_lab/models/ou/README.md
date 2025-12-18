@@ -154,9 +154,9 @@ where:
 - $b = e^{-\kappa \Delta t}$,
 - $a = \theta(1 - b)$,
 - $\varepsilon_t$ is Gaussian noise with variance
-  $$
+  $
   \mathrm{Var}(\varepsilon_t) = \sigma^2 \cdot \frac{1 - e^{-2\kappa \Delta t}}{2\kappa}.
-  $$
+  $
 
 This is just an **AR(1) model** in discrete time. We can:
 
