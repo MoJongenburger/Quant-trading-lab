@@ -107,8 +107,7 @@ For a time step $\Delta t$, the OU process has a **closed-form transition**:
 
 $$
 X_{t+\Delta t}
-= \theta + (X_t - \theta)e^{-\kappa \Delta t}
-  + \sigma \sqrt{\frac{1 - e^{-2\kappa \Delta t}}{2\kappa}}\, Z,
+= \theta + (X_t - \theta)e^{-\kappa \Delta t}+ \sigma \sqrt{\frac{1 - e^{-2\kappa \Delta t}}{2\kappa}}\, Z,
 $$
 
 where $Z \sim \mathcal{N}(0, 1)$.
