@@ -241,7 +241,7 @@ Basic validation is performed (e.g. `kappa > 0`, `sigma > 0`).
 Implements the exact transition
 
 $$
-X_{t+\Delta t}= \theta + (X_t - \theta)e^{-\kappa \Delta t}* \sigma \sqrt{\frac{1 - e^{-2\kappa \Delta t}}{2\kappa}}, Z,
+X_{t+\Delta t}= \theta + (X_t - \theta)e^{-\kappa \Delta t} + \sigma \sqrt{\frac{1 - e^{-2\kappa \Delta t}}{2\kappa}}, Z,
 $$
 
 with $Z \sim \mathcal{N}(0, 1)$.
