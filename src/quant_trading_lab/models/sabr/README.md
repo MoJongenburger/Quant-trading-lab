@@ -222,5 +222,5 @@ Unit tests:
 * Hagan, P. and Woodward, D. (1999),
   *Equivalent Black Volatilities*.
 
-````
+
 
