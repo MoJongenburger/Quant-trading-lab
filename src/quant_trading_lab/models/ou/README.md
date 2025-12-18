@@ -115,16 +115,19 @@ where $Z \sim \mathcal{N}(0, 1)$.
 
 This implies:
 
-- Conditional mean:
-  $$
-  \mathbb{E}[X_{t+\Delta t} \mid X_t]
-  = \theta + (X_t - \theta)e^{-\kappa \Delta t},
-  $$
-- Conditional variance:
-  $$
-  \operatorname{Var}[X_{t+\Delta t} \mid X_t]
-  = \frac{\sigma^2}{2\kappa}\left(1 - e^{-2\kappa \Delta t}\right).
-  $$
+**Conditional mean**
+
+$$
+\mathbb{E}[X_{t+\Delta t} \mid X_t]
+= \theta + (X_t - \theta)e^{-\kappa \Delta t},
+$$
+
+**Conditional variance**
+
+$$
+\operatorname{Var}[X_{t+\Delta t} \mid X_t]
+= \frac{\sigma^2}{2\kappa}\left(1 - e^{-2\kappa \Delta t}\right).
+$$
 
 In this module we use this **exact discretisation**, not a simple Euler scheme, to
 simulate OU paths.
@@ -159,13 +162,15 @@ where:
 
 This is just an **AR(1) model** in discrete time. We can:
 
-1. Run a simple OLS regression:
+1. **Run a simple OLS regression:**
+
    $$
    X_{t+1} = a + b X_t + \varepsilon_t
    $$
+
    to estimate $a$ and $b$.
 
-2. Recover continuous-time parameters:
+2. **Recover continuous-time parameters:**
 
    - Mean-reversion speed:
      $$
@@ -176,27 +181,32 @@ This is just an **AR(1) model** in discrete time. We can:
      \theta = \frac{a}{1 - b}.
      $$
 
-3. Estimate $\sigma$ from the residual variance:
+3. **Estimate $\sigma$ from the residual variance:**
 
-   - Let $\hat{\varepsilon}_t = X_{t+1} - (a + b X_t)$ and
-     $$
-     \hat{\sigma}_\varepsilon^2
-       \approx \frac{1}{n-2} \sum_{t} \hat{\varepsilon}_t^2.
-     $$
-   - Use the relationship
-     $$
-     \hat{\sigma}_\varepsilon^2
-       = \sigma^2 \cdot \frac{1 - e^{-2\kappa \Delta t}}{2\kappa}
-     $$
-     to solve for $\sigma$:
-     $$
-     \sigma
-     = \sqrt{
-         \hat{\sigma}_\varepsilon^2
-         \cdot
-         \frac{2\kappa}{1 - e^{-2\kappa \Delta t}}
-       }.
-     $$
+   Let
+   $$
+   \hat{\varepsilon}_t = X_{t+1} - (a + b X_t),
+   $$
+   and define
+   $$
+   \hat{\sigma}_\varepsilon^2
+   \approx \frac{1}{n-2} \sum_{t} \hat{\varepsilon}_t^2.
+   $$
+
+   Use the relationship
+   $$
+   \hat{\sigma}_\varepsilon^2
+   = \sigma^2 \cdot \frac{1 - e^{-2\kappa \Delta t}}{2\kappa}
+   $$
+   to solve for $\sigma$:
+   $$
+   \sigma
+   = \sqrt{
+       \hat{\sigma}_\varepsilon^2
+       \cdot
+       \frac{2\kappa}{1 - e^{-2\kappa \Delta t}}
+     }.
+   $$
 
 In this module, `estimate_ou_from_series` wraps exactly this logic:
 
@@ -230,13 +240,17 @@ Basic validation is performed (e.g. `kappa > 0`, `sigma > 0`).
 
 ### `ou_exact_step(x_t, dt, params, rng=None)`
 
-* Implements the exact transition
-  $$
-  X_{t+\Delta t}
-  = \theta + (X_t - \theta)e^{-\kappa \Delta t}
+Implements the exact transition
 
-  * \sigma \sqrt{\frac{1 - e^{-2\kappa \Delta t}}{2\kappa}}, Z.
-    $$
+$$
+X_{t+\Delta t}
+= \theta + (X_t - \theta)e^{-\kappa \Delta t}
+
+* \sigma \sqrt{\frac{1 - e^{-2\kappa \Delta t}}{2\kappa}}, Z,
+  $$
+
+with $Z \sim \mathcal{N}(0, 1)$.
+
 * Works for scalar or vector `x_t`.
 * Accepts a NumPy random generator for reproducibility.
 
